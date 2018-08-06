@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?android:attr/colorPrimary"
+      android:minHeight="?android:attr/actionBarSize"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      />
+
+  <android.support.design.widget.TextInputLayout
+      android:id="@+id/job_til"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/toolbar"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="16dp"
+      >
+    <AutoCompleteTextView
+        android:id="@+id/job"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Location"
+        >
+    </AutoCompleteTextView>
+  </android.support.design.widget.TextInputLayout>
+
+  <fragment class="com.google.android.gms.maps.SupportMapFragment"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/job_til"
+      />
+
+  <android.support.v7.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <ImageView
+          android:id="@+id/user_profile"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="sans-serif"
+          android:padding="8dp"
+          />
+
+      <TextView
+          android:id="@+id/user_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/user_profile"
+          android:fontFamily="sans-serif"
+          android:padding="8dp"
+          android:singleLine="true"
+          android:textAllCaps="true"
+          android:textColor="@android:color/black"
+          />
+
+      <TextView
+          android:id="@+id/job_number"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/user_name"
+          android:layout_toRightOf="@+id/user_profile"
+          android:fontFamily="sans-serif"
+          android:padding="8dp"
+          android:singleLine="true"
+          android:textColor="@android:color/black"
+          />
+
+      <TextView
+          android:id="@+id/address"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/job_number"
+          android:layout_toRightOf="@+id/user_profile"
+          android:fontFamily="sans-serif"
+          android:padding="8dp"
+          android:singleLine="true"
+          android:textColor="@android:color/black"
+          />
+
+    </RelativeLayout>
+  </android.support.v7.widget.CardView>
+</RelativeLayout>

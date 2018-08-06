@@ -1,0 +1,14 @@
+<resources>
+  <string name="app_name">Haulio</string>
+  <string name="jobnumber">Job Number : </string>
+  <string name="companyname">Company : </string>
+  <string name="address">Address : </string>
+  <string name="accept">Accept</string>
+  <string name="job">Accepted Job</string>
+  <string name="logout">Logout</string>
+  <string name="title_activity_maps">Map</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
