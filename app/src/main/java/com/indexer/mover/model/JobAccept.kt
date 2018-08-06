@@ -10,7 +10,6 @@ import java.io.Serializable
 data class JobAccept(
   @PrimaryKey(autoGenerate = false)
   val id: Int,
-  val username:String,
   @SerializedName("job-id")
   val job_id: Int,
   val priority: Int,

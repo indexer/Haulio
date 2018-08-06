@@ -44,6 +44,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
   private lateinit var mGoogleSignInClient: GoogleSignInClient
   private lateinit var jobObject: Job
 
+
   @SuppressLint("SetTextI18n")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -52,7 +53,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     supportActionBar?.setDisplayShowTitleEnabled(true)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     supportActionBar?.title = getString(R.string.app_name)
+
     jobObject = intent.extras.get("job") as Job
+
 
     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)

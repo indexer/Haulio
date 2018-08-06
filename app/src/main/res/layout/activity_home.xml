@@ -24,6 +24,7 @@
      />
 
   <TextView
+
       android:textSize="18sp"
       android:fontFamily="sans-serif-condensed"
       android:textStyle="bold"

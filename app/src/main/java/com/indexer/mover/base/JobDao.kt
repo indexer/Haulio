@@ -14,7 +14,7 @@ interface JobDao {
   fun insertAllJob(products: List<Job>)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertAcceptJob(products: Job)
+  fun insertAcceptJob(products: JobAccept)
 
   @Query("SELECT * FROM job ORDER BY priority ASC")
   fun getAlljob(): List<Job>

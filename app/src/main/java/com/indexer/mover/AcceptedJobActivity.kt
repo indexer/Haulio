@@ -6,8 +6,10 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,12 +17,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.indexer.mover.base.AppDatabase
 import com.indexer.mover.base.BaseViewHolder.OnItemClickListener
+import com.indexer.mover.model.Job
+import com.indexer.mover.model.JobAccept
 import com.indexer.mover.rest.Config
 import com.indexer.mover.rest.RestClient
 import com.indexer.ottohub.rest.enqueue
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.job_list
+import kotlinx.android.synthetic.main.activity_home.lbl
+import kotlinx.android.synthetic.main.activity_home.mProgress
+import kotlinx.android.synthetic.main.activity_home.mTextStatus
 import kotlinx.android.synthetic.main.activity_home.navigation
 import kotlinx.android.synthetic.main.activity_home.toolbar
 
@@ -29,26 +36,20 @@ class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
     position: Int,
     status: Int
   ) {
+    val job = userJobAdapter.getItem(position)
+    val jobAccept =
+      Job(job.id, job.job_id, job.priority, job.company, job.address, job.geolocation)
     if (status != Config.accept) {
       val intent = Intent(this, MapsActivity::class.java)
-      intent.putExtra("job", userJobAdapter.getItem(position))
+      intent.putExtra("job", jobAccept)
       startActivity(intent)
-    }
-
-    if (status == Config.accept) {
-      AppDatabase.getInstance(this@AcceptedJobActivity)
-          .jobDao()
-          .insertAcceptJob(userJobAdapter.getItem(position))
-      userJobAdapter.removeItem(position)
-      userJobAdapter.notifyItemRemoved(position)
-      userJobAdapter.notifyDataSetChanged()
     }
 
   }
 
   private lateinit var mGoogleSignInClient: GoogleSignInClient
   lateinit var layoutManager: LinearLayoutManager
-  private lateinit var userJobAdapter: UserJobAdapter
+  private lateinit var userJobAdapter: UserAcceptJobAdapter
   private lateinit var appDatabase: AppDatabase
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
 
-    userJobAdapter = UserJobAdapter(this)
+    userJobAdapter = UserAcceptJobAdapter(this)
     layoutManager = LinearLayoutManager(this)
     job_list.layoutManager = layoutManager
     job_list.adapter = userJobAdapter
@@ -67,11 +68,14 @@ class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
     supportActionBar?.setDisplayShowTitleEnabled(true)
     supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_drawer)
 
+    lbl.text = "All Accepted Job"
+
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .build()
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
     appDatabase = AppDatabase.getInstance(this)
+    selectFromDatabase()
 
     val header = navigation.getHeaderView(0)
     val view = header.findViewById(R.id.user_profile) as ImageView
@@ -87,6 +91,20 @@ class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
 
   }
 
+  private fun selectFromDatabase() {
+    val acceptJob = appDatabase.jobDao()
+        .getAllAcceptjob()
+    if (acceptJob.isEmpty()) {
+      mProgress.visibility = View.GONE
+      mTextStatus.visibility = View.VISIBLE
+    } else {
+      job_list.visibility = View.VISIBLE
+      mProgress.visibility = View.GONE
+      mTextStatus.visibility = View.GONE
+      userJobAdapter.items = acceptJob
+    }
+  }
+
   private fun setupDrawerContent(navigationView: NavigationView) {
     navigationView.setNavigationItemSelectedListener { menuItem ->
       selectDrawerItem(menuItem)
@@ -97,8 +115,12 @@ class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
   fun selectDrawerItem(menuItem: MenuItem) {
 
     when (menuItem.itemId) {
+      R.id.available_jb -> {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+      }
       R.id.acceptJob -> {
-
+        selectFromDatabase()
       }
       R.id.stop -> {
         mGoogleSignInClient.signOut()

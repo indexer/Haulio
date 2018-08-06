@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.indexer.mover.base.AppDatabase
 import com.indexer.mover.base.BaseViewHolder.OnItemClickListener
+import com.indexer.mover.model.JobAccept
 import com.indexer.mover.rest.Config
 import com.indexer.mover.rest.RestClient
 import com.indexer.ottohub.rest.enqueue
@@ -39,8 +40,12 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     if (status == Config.accept) {
+      val job = userJobAdapter.getItem(position)
+      val jobAccept =
+        JobAccept(job.id, job.job_id, job.priority, job.company, job.address, job.geolocation)
       AppDatabase.getInstance(this@HomeActivity)
-          .jobDao().insertAcceptJob(userJobAdapter.getItem(position))
+          .jobDao()
+          .insertAcceptJob(jobAccept)
       userJobAdapter.removeItem(position)
       userJobAdapter.notifyItemRemoved(position)
       userJobAdapter.notifyDataSetChanged()
@@ -101,7 +106,7 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
           mProgress.visibility = View.GONE
           job_list.visibility = View.VISIBLE
           userJobAdapter.items = it.body()
-        }else{
+        } else {
           mProgress.visibility = View.GONE
           mTextStatus.visibility = View.VISIBLE
         }
@@ -121,7 +126,10 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
   fun selectDrawerItem(menuItem: MenuItem) {
 
     when (menuItem.itemId) {
-      R.id.acceptJob-> {
+      R.id.available_jb -> {
+        fetchFromApi()
+      }
+      R.id.acceptJob -> {
         val intent = Intent(this, AcceptedJobActivity::class.java)
         startActivity(intent)
       }
@@ -157,7 +165,7 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
       return true
     }
 
-    if(id == android.R.id.home){
+    if (id == android.R.id.home) {
       drawer_layout.openDrawer(GravityCompat.START)
     }
 
