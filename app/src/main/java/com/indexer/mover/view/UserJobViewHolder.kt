@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.job_item.view.job_number
 class UserJobViewHolder(itemView: View, listener: OnItemClickListener?) :
     BaseViewHolder(itemView, listener) {
 
-  fun onBind(userJob: Job) {
+  fun onBind(userJob: Job,int: Int) {
     itemView.job_number.text = itemView.context.getString(string.jobnumber) +userJob.job_id
     itemView.company_name.text = itemView.context.getString(string.companyname) +userJob.company
     itemView.address.text = itemView.context.getString(string.address) +userJob.address
 
     itemView.accept.setOnClickListener {
-      listener?.onItemClick(Config.accept)
+      listener?.onItemClick(int,Config.accept)
     }
   }
 

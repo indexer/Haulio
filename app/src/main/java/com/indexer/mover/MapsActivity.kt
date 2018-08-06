@@ -93,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
   }
 
-  fun updateViewUI(jobList: List<Job>) {
+  private fun updateViewUI(jobList: List<Job>) {
     job.clearFocus()
     job_number.text = getString(string.jobnumber) + jobList[0].job_id.toString()
     address.text = getString(string.address) + jobList[0].address
@@ -106,7 +106,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 LatLng(addresses[0].latitude, addresses[0].longitude)
             ).title("Job location")
         )
-
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 (LatLng(addresses[0].latitude, addresses[0].longitude)), 13f

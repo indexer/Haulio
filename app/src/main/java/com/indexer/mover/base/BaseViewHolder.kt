@@ -11,10 +11,10 @@ abstract class BaseViewHolder(itemView: View, val listener: OnItemClickListener?
   }
 
   override fun onClick(v: View) {
-    listener?.onItemClick(adapterPosition)
+    listener?.onItemClick(adapterPosition,0)
   }
 
   interface OnItemClickListener {
-    fun onItemClick(position: Int)
+    fun onItemClick(position: Int,status: Int)
   }
 }

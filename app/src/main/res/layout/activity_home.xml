@@ -23,11 +23,37 @@
       android:minHeight="?android:attr/actionBarSize"
      />
 
+  <TextView
+      android:textSize="18sp"
+      android:fontFamily="sans-serif-condensed"
+      android:textStyle="bold"
+      android:id="@+id/lbl"
+      android:layout_below="@+id/toolbar"
+      android:padding="8dp"
+      android:text="@string/available_job"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      />
+  <ProgressBar
+      android:layout_centerInParent="true"
+      android:id="@+id/mProgress"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      />
 
+  <TextView
+      android:visibility="gone"
+      android:text="@string/no_available_jobs"
+      android:layout_centerInParent="true"
+      android:id="@+id/mTextStatus"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      />
 
   <android.support.v7.widget.RecyclerView
+      android:layout_below="@+id/lbl"
       android:id="@+id/job_list"
-      android:layout_below="@+id/toolbar"
+      android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       />

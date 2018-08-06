@@ -13,7 +13,7 @@ class UserJobAdapter (var onItemClickListener: BaseViewHolder.OnItemClickListene
     BaseAdapter<UserJobViewHolder, Job>() {
 
   override fun onBindViewHolder(holder: UserJobViewHolder, position: Int) {
-    holder.onBind(mItems[position])
+    holder.onBind(mItems[position],position)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserJobViewHolder {

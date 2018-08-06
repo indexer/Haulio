@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -22,12 +21,10 @@ import com.indexer.ottohub.rest.enqueue
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.job_list
-import kotlinx.android.synthetic.main.activity_home.mProgress
-import kotlinx.android.synthetic.main.activity_home.mTextStatus
 import kotlinx.android.synthetic.main.activity_home.navigation
 import kotlinx.android.synthetic.main.activity_home.toolbar
 
-class HomeActivity : AppCompatActivity(), OnItemClickListener {
+class AcceptedJobActivity : AppCompatActivity(), OnItemClickListener {
   override fun onItemClick(
     position: Int,
     status: Int
@@ -39,8 +36,9 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     if (status == Config.accept) {
-      AppDatabase.getInstance(this@HomeActivity)
-          .jobDao().insertAcceptJob(userJobAdapter.getItem(position))
+      AppDatabase.getInstance(this@AcceptedJobActivity)
+          .jobDao()
+          .insertAcceptJob(userJobAdapter.getItem(position))
       userJobAdapter.removeItem(position)
       userJobAdapter.notifyItemRemoved(position)
       userJobAdapter.notifyDataSetChanged()
@@ -74,7 +72,6 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
         .build()
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
     appDatabase = AppDatabase.getInstance(this)
-    fetchFromApi()
 
     val header = navigation.getHeaderView(0)
     val view = header.findViewById(R.id.user_profile) as ImageView
@@ -90,27 +87,6 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
 
   }
 
-  fun fetchFromApi() {
-    val jobList = RestClient.getService()
-        .getJobList()
-    jobList.enqueue(success = {
-      if (it.isSuccessful) {
-        if (it.body()?.isNotEmpty()!!) {
-          appDatabase.jobDao()
-              .insertAllJob(it.body()!!)
-          mProgress.visibility = View.GONE
-          job_list.visibility = View.VISIBLE
-          userJobAdapter.items = it.body()
-        }else{
-          mProgress.visibility = View.GONE
-          mTextStatus.visibility = View.VISIBLE
-        }
-      }
-    }, failure = {
-
-    })
-  }
-
   private fun setupDrawerContent(navigationView: NavigationView) {
     navigationView.setNavigationItemSelectedListener { menuItem ->
       selectDrawerItem(menuItem)
@@ -121,9 +97,8 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
   fun selectDrawerItem(menuItem: MenuItem) {
 
     when (menuItem.itemId) {
-      R.id.acceptJob-> {
-        val intent = Intent(this, AcceptedJobActivity::class.java)
-        startActivity(intent)
+      R.id.acceptJob -> {
+
       }
       R.id.stop -> {
         mGoogleSignInClient.signOut()
@@ -153,11 +128,13 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
     val id = item.itemId
     if (id == R.id.action_favorite) {
       mGoogleSignInClient.signOut()
-      this.finish()
+      val intent = Intent(applicationContext, SignInActivity::class.java)
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+      startActivity(intent)
       return true
     }
 
-    if(id == android.R.id.home){
+    if (id == android.R.id.home) {
       drawer_layout.openDrawer(GravityCompat.START)
     }
 
